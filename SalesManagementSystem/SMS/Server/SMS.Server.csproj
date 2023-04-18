@@ -8,9 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SMS.BLL\SMS.BLL.csproj" />
+    <ProjectReference Include="..\..\SMS.DAL\SMS.DAL.csproj" />
     <ProjectReference Include="..\Client\SMS.Client.csproj" />
     <ProjectReference Include="..\Shared\SMS.Shared.csproj" />
   </ItemGroup>

@@ -1,0 +1,80 @@
+﻿@page "/order/add"
+@page "/order/edit/{id:int}"
+@using SMS.Shared.Models
+@using static SMS.Shared.Enums;
+@inject HttpClient http
+<PageTitle>@Title</PageTitle>
+<h3>@Title</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <a href="/orders" class="btn btn-secondary my-2">All records</a>
+
+        <EditForm Model="@order" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <InputText @bind-Value="order.Name" class="form-control" />
+                <ValidationMessage For="@(()=>order.Name)" />
+            </div>
+            <div class="form-group">
+                <label for="State">State</label>
+                <InputText @bind-Value="order.State" class="form-control" />
+                <ValidationMessage For="@(()=>order.State)" />
+            </div>
+
+           @* <div class="form-group">
+                <label for="State">State</label>
+                <select @bind="order.State" class="form-control">
+                    @foreach (var state in Enum.GetValues(typeof(StateCode)))
+                    {
+                        <option value="@state">@state</option>
+                    }
+                </select>
+                <ValidationMessage For="@(()=>order.State)" />
+            </div>*@
+
+            <div class="py-2 @messageClass">
+                @status.Message
+            </div>
+
+            <div class="py-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private string Title = "Add order";
+    private string messageClass = "";
+    Order order = new();
+    Status? status = new();
+    private async Task Save()
+    {
+        try
+        {
+            status.StatusCode = 0;
+            status.Message = "Wait.....";
+            var response = await http.PostAsJsonAsync("api/order/addupdate", order);
+            status = await response.Content.ReadFromJsonAsync<Status>();
+            messageClass = status.StatusCode == 1 ? "text-success" : "text-danger";
+        }
+        catch (Exception ex)
+        {
+            
+        }
+        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+        {
+            order = await http.GetFromJsonAsync<Order>($"api/order/getbyid/{Id}");
+        }
+    }
+}
