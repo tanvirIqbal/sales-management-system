@@ -14,6 +14,6 @@ namespace SMS.Shared.Models
         [Required]
         public string? Name { get; set; }
         [Required]
-        public string State { get; set; }
+        public StateCode State { get; set; }
     }
 }

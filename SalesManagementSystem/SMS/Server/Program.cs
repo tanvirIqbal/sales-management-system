@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using SMS.BLL.Contacts;
+using SMS.BLL.Services;
 using SMS.DAL.Contacts;
 using SMS.DAL.Data;
 using SMS.DAL.Repositories;
@@ -13,6 +15,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 

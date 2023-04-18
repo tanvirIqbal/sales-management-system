@@ -54,7 +54,7 @@
 
     private async Task GetOrders(int pageNo = 1)
     {
-        orders = await http.GetFromJsonAsync<List<Order>>($"api/person/getall");
+        orders = await http.GetFromJsonAsync<List<Order>>($"api/order/getall");
     }
 
     protected override async Task OnInitializedAsync()
