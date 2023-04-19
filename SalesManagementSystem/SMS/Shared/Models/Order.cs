@@ -15,5 +15,6 @@ namespace SMS.Shared.Models
         public string? Name { get; set; }
         [Required]
         public StateCode State { get; set; }
+        public List<Window> Windows { get; set; }
     }
 }

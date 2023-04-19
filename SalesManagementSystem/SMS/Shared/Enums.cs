@@ -61,5 +61,11 @@ namespace SMS.Shared
             WI,
             WY
         }
+
+        public enum ElementType
+        {
+            Doors,
+            Window
+        }
     }
 }
