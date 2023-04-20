@@ -2,14 +2,30 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SMS.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class WindowAndSubElementEntityCreated : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Windows",
                 columns: table => new
@@ -39,7 +55,7 @@ namespace SMS.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Element = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     Width = table.Column<int>(type: "int", nullable: false),
                     Height = table.Column<int>(type: "int", nullable: false),
                     WindowId = table.Column<int>(type: "int", nullable: false)
@@ -53,6 +69,41 @@ namespace SMS.DAL.Migrations
                         principalTable: "Windows",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "Name", "State" },
+                values: new object[,]
+                {
+                    { 1, "New York Building 1", 31 },
+                    { 2, "California Hotel AJK", 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Windows",
+                columns: new[] { "Id", "Name", "OrderId", "QuantityOfWindows", "TotalSubElements" },
+                values: new object[,]
+                {
+                    { 1, "A51", 1, 4, 3 },
+                    { 2, "C Zone 5", 1, 2, 1 },
+                    { 3, "GLB", 2, 3, 2 },
+                    { 4, "OHF", 2, 10, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SubElements",
+                columns: new[] { "Id", "Element", "Height", "Type", "Width", "WindowId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1850, 0, 1200, 1 },
+                    { 2, 2, 1850, 1, 800, 1 },
+                    { 3, 3, 1850, 1, 700, 1 },
+                    { 4, 1, 2000, 1, 1500, 2 },
+                    { 5, 1, 2200, 0, 1400, 3 },
+                    { 6, 2, 2200, 1, 600, 3 },
+                    { 7, 1, 2000, 1, 1500, 4 },
+                    { 8, 1, 2000, 1, 1500, 4 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -74,6 +125,9 @@ namespace SMS.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Windows");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
         }
     }
 }

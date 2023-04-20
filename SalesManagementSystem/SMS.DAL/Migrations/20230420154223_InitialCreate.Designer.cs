@@ -11,8 +11,8 @@ using SMS.DAL.Data;
 namespace SMS.DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230419054716_ChangeElementType")]
-    partial class ChangeElementType
+    [Migration("20230420154223_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,20 @@ namespace SMS.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "New York Building 1",
+                            State = 31
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "California Hotel AJK",
+                            State = 4
+                        });
                 });
 
             modelBuilder.Entity("SMS.Shared.Models.SubElement", b =>
@@ -72,6 +86,80 @@ namespace SMS.DAL.Migrations
                     b.HasIndex("WindowId");
 
                     b.ToTable("SubElements");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Element = 1,
+                            Height = 1850,
+                            Type = 0,
+                            Width = 1200,
+                            WindowId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Element = 2,
+                            Height = 1850,
+                            Type = 1,
+                            Width = 800,
+                            WindowId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Element = 3,
+                            Height = 1850,
+                            Type = 1,
+                            Width = 700,
+                            WindowId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Element = 1,
+                            Height = 2000,
+                            Type = 1,
+                            Width = 1500,
+                            WindowId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Element = 1,
+                            Height = 2200,
+                            Type = 0,
+                            Width = 1400,
+                            WindowId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Element = 2,
+                            Height = 2200,
+                            Type = 1,
+                            Width = 600,
+                            WindowId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Element = 1,
+                            Height = 2000,
+                            Type = 1,
+                            Width = 1500,
+                            WindowId = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Element = 1,
+                            Height = 2000,
+                            Type = 1,
+                            Width = 1500,
+                            WindowId = 4
+                        });
                 });
 
             modelBuilder.Entity("SMS.Shared.Models.Window", b =>
@@ -100,6 +188,40 @@ namespace SMS.DAL.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Windows");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "A51",
+                            OrderId = 1,
+                            QuantityOfWindows = 4,
+                            TotalSubElements = 3
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "C Zone 5",
+                            OrderId = 1,
+                            QuantityOfWindows = 2,
+                            TotalSubElements = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "GLB",
+                            OrderId = 2,
+                            QuantityOfWindows = 3,
+                            TotalSubElements = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "OHF",
+                            OrderId = 2,
+                            QuantityOfWindows = 10,
+                            TotalSubElements = 2
+                        });
                 });
 
             modelBuilder.Entity("SMS.Shared.Models.SubElement", b =>
