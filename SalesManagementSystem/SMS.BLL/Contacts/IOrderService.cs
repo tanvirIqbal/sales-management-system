@@ -11,7 +11,7 @@ namespace SMS.BLL.Contacts
     public interface IOrderService
     {
         public Task<Order> Create(OrderDTO order);
-        public void Delete(OrderDTO order);
+        public void Delete(int id);
         public void Update(OrderDTO order);
         public IEnumerable<OrderDTO> GetAll();
         public OrderDTO GetById(int Id);

@@ -27,9 +27,9 @@ namespace SMS.BLL.Services
             return _orderRepository.Create(order);
         }
 
-        public void Delete(OrderDTO orderDto)
+        public void Delete(int id)
         {
-            var order = _mapper.Map<Order>(orderDto);
+            var order = _orderRepository.GetById(id);
             _orderRepository.Delete(order);
         }
 

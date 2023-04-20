@@ -14,6 +14,7 @@ namespace SMS.Shared.DTO
         public string Name { get; set; }
         public int QuantityOfWindows { get; set; }
         public int TotalSubElements { get; set; }
-        public List<SubElementDTO> SubElements { get; set; }
+        public bool IsDeleted { get; set; }
+        public List<SubElementDTO> SubElements { get; set; } = new List<SubElementDTO>();
     }
 }

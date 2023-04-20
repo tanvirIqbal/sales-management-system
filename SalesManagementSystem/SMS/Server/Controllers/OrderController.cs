@@ -50,14 +50,7 @@ namespace SMS.Server.Controllers
         public IActionResult Delete(int id)
         {
             Status status = new();
-            var order = _orderService.GetById(id);
-            if (order is null)
-            {
-                status.StatusCode = 0;
-                status.Message = "Order does not exist";
-                return Ok(status);
-            }
-            _orderService.Delete(order);
+            _orderService.Delete(id);
             status.StatusCode = 1;
             status.Message = "Deleted successfully";
             return Ok(status);

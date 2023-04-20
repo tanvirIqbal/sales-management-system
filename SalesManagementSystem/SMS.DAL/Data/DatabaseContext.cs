@@ -25,6 +25,8 @@ namespace SMS.DAL.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<SubElement>().Ignore(o => o.IsDeleted);
+            modelBuilder.Entity<Window>().Ignore(o => o.IsDeleted);
 
             modelBuilder.Entity<Order>().HasData(new Order
             {
@@ -44,6 +46,7 @@ namespace SMS.DAL.Data
                 Id = 1,
                 Name = "A51",
                 QuantityOfWindows = 4,
+                TotalSubElements = 3,
                 OrderId = 1
             });
             modelBuilder.Entity<Window>().HasData(new Window
@@ -51,6 +54,7 @@ namespace SMS.DAL.Data
                 Id = 2,
                 Name = "C Zone 5",
                 QuantityOfWindows = 2,
+                TotalSubElements = 1,
                 OrderId = 1
             });
 
@@ -60,6 +64,7 @@ namespace SMS.DAL.Data
                 Id = 3,
                 Name = "GLB",
                 QuantityOfWindows = 3,
+                TotalSubElements = 2,
                 OrderId = 2
             });
             modelBuilder.Entity<Window>().HasData(new Window
@@ -67,6 +72,7 @@ namespace SMS.DAL.Data
                 Id = 4,
                 Name = "OHF",
                 QuantityOfWindows = 10,
+                TotalSubElements = 2,
                 OrderId = 2
             });
 

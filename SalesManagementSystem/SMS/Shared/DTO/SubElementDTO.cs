@@ -15,5 +15,6 @@ namespace SMS.Shared.DTO
         public ElementType Type { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

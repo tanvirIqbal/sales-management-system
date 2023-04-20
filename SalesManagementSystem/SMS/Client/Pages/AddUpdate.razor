@@ -8,69 +8,238 @@
 <h3>@Title</h3>
 
 <div class="row">
-    <div class="col-md-6">
-        <a href="/orders" class="btn btn-secondary my-2">All records</a>
+    <div class="col-md-12">
+        <a href="/" class="btn btn-primary my-2">All Orders</a>
 
         <EditForm Model="@order" OnValidSubmit="Save">
             <DataAnnotationsValidator />
-            <div class="form-group">
-                <label for="Name">Name</label>
-                <InputText @bind-Value="order.Name" class="form-control" />
-                <ValidationMessage For="@(()=>order.Name)" />
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="Name">Name</label>
+                    <InputText @bind-Value="order.Name" class="form-control" />
+                    <ValidationMessage For="@(()=>order.Name)" />
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="State">State</label>
+                    <select @bind="order.State" class="form-control">
+                        @foreach (var state in Enum.GetValues(typeof(StateCode)))
+                        {
+                            <option value="@state">@state</option>
+                        }
+                    </select>
+                    <ValidationMessage For="@(()=>order.State)" />
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="State">State</label>
-                <select @bind="order.State" class="form-control">
-                    @foreach (var state in Enum.GetValues(typeof(StateCode)))
-                    {
-                        <option value="@state">@state</option>
-                    }
-                </select>
-                <ValidationMessage For="@(()=>order.State)" />
-            </div>
 
+            
             <div class="py-2 @messageClass">
                 @status.Message
             </div>
 
             <div class="py-2">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" @onclick="() => Open(0)">Add New Window</button>
+                <button type="submit" class="btn btn-primary" style="float:right;">Save</button>
             </div>
         </EditForm>
+        
+        @if (order != null && order.Windows != null && order.Windows.Count > 0)
+        {
+            <hr />
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Window Name</th>
+                        <th>Quantity Of Windows</th>
+                        <th>Total SubElements</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                @foreach (var window in order.Windows)
+                {
+                    if (window.IsDeleted)
+                    {
+                        continue;
+                    }
+                    <tbody>
+                        <tr>
+                            <td>@window.Name</td>
+                            <td>@window.QuantityOfWindows</td>
+                            <td>@window.TotalSubElements</td>
+                            <td>
+                                <button class="btn btn-success" @onclick="() => Open(window.Id)">Edit</button>
+                                <button class="btn btn-danger" @onclick="() => DeleteWindow(window)">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Element</th>
+                                            <th>Type</th>
+                                            <th>Width</th>
+                                            <th>Height</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var subElement in window.SubElements)
+                                    {
+                                        if (subElement.IsDeleted)
+                                        {
+                                            continue;
+                                        }
+                                        <tbody>
+                                            <tr>
+                                                <td>@subElement.Element</td>
+                                                <td>@subElement.Type</td>
+                                                <td>@subElement.Width</td>
+                                                <td>@subElement.Height</td>
+                                            </tr>
+                                        </tbody>
+                                    }
+                                </table>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        }
     </div>
 </div>
 
+<div class="modal fade @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay; overflow-y: auto;">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@WindowModalTitle</h5>
+                <button type="button" class="close" data-dismiss="modal" @onclick="Close">
+                    x
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@window">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="Name">Name</label>
+                                <InputText @bind-Value="window.Name" class="form-control" />
+                                <ValidationMessage For="@(()=>window.Name)" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="Name">Quantity Of Windows</label>
+                                <InputNumber @bind-Value="window.QuantityOfWindows" class="form-control" min="0" />
+                                <ValidationMessage For="@(()=>window.QuantityOfWindows)" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="Name">Total Sub Elements</label>
+                                <InputNumber @bind-Value="window.TotalSubElements" class="form-control" readonly min="0" />
+                                <ValidationMessage For="@(()=>window.TotalSubElements)" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <h5>Add Element</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="Name">Element</label>
+                                <InputNumber @bind-Value="subElementDTO.Element" class="form-control" min="0" />
+                                <ValidationMessage For="@(()=>subElementDTO.Element)" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="State">Type</label>
+                                <select @bind="subElementDTO.Type" class="form-control">
+                                    @foreach (var type in Enum.GetValues(typeof(ElementType)))
+                                    {
+                                        <option value="@type">@type</option>
+                                    }
+                                </select>
+                                <ValidationMessage For="@(()=>subElementDTO.Type)" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="Name">Width</label>
+                                <InputNumber @bind-Value="subElementDTO.Width" class="form-control" min="0" />
+                                <ValidationMessage For="@(()=>subElementDTO.Width)" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="Name">Height</label>
+                                <InputNumber @bind-Value="subElementDTO.Height" class="form-control" min="0" />
+                                <ValidationMessage For="@(()=>subElementDTO.Height)" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <br />
+                            <button type="button" class="btn btn-success" @onclick="AddSubElement">Add Element</button>
+                        </div>
+                    </div>
+                    <div class="py-2 @modalMessageClass">
+                        @modalStatus.Message
+                    </div>
+                    @if (window != null && window.SubElements.Count > 0)
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Element</th>
+                                            <th>Type</th>
+                                            <th>Width</th>
+                                            <th>Height</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var subelement in window.SubElements)
+                                    {
+                                        if (subelement.IsDeleted)
+                                        {
+                                            continue;
+                                        }
+                                        <tbody>
+                                            <tr>
+                                                <td>@subelement.Element</td>
+                                                <td>@subelement.Type</td>
+                                                <td>@subelement.Width</td>
+                                                <td>@subelement.Height</td>
+                                                <td>
+                                                    <button class="btn btn-danger" @onclick="() => DeleteSubElement(subelement)">Delete</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    }
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="AddWindow">@WindowModalTitle</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if (showBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
 @code {
-    [Parameter]
-    public int Id { get; set; }
-
-    private string Title = "Add order";
-    private string messageClass = "";
-    OrderDTO order = new();
-    Status? status = new();
-    private async Task Save()
-    {
-        try
-        {
-            status.StatusCode = 0;
-            status.Message = "Wait.....";
-            var response = await http.PostAsJsonAsync("api/order/addupdate", order);
-            status = await response.Content.ReadFromJsonAsync<Status>();
-            messageClass = status.StatusCode == 1 ? "text-success" : "text-danger";
-        }
-        catch (Exception ex)
-        {
-            
-        }
-        
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (Id > 0)
-        {
-            order = await http.GetFromJsonAsync<OrderDTO>($"api/order/getbyid/{Id}");
-        }
-    }
+    
 }

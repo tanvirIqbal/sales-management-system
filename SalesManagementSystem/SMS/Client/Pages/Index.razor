@@ -1,9 +1,123 @@
 ﻿@page "/"
+@using SMS.Shared.DTO;
+@using SMS.Shared.Models;
+@inject HttpClient http
+@inject IJSRuntime jsRuntime
+<PageTitle>Orders</PageTitle>
+<h3>Orders</h3>
+<a href="/order/add" class="btn btn-primary my-2">Add</a>
+@if (orders != null && orders.Count > 0)
+{
+    <div class="row">
+        <div class="col-md-12">
 
-<PageTitle>Index</PageTitle>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>State</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                @foreach (var order in orders)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@order.Name</td>
+                            <td>@order.State</td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="() => Open(order.Id)">Details</button>
+                                <a href="/order/edit/@order.Id" class="btn btn-success">Edit</a>
+                                <a class="btn btn-danger" @onclick="async ()=> await Delete(order)">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+    </div>
+}
+<div class="modal fade @modalClass" tabindex="-1" role="dialog" style="display:@modalDisplay; overflow-y: auto;">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" @onclick="Close">
+                    x
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (order != null && order.Windows != null && order.Windows.Count > 0)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <b>Order Name: </b>@order.Name
+                        </div>
+                        <div class="col">
+                            <b>Order State: </b>@order.State
+                        </div>
+                    </div>
+                    <hr />
 
-<h1>Hello, world!</h1>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Window Name</th>
+                                <th>Quantity Of Windows</th>
+                                <th>Total SubElements</th>
+                            </tr>
+                        </thead>
+                        @foreach (var window in order.Windows)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td>@window.Name</td>
+                                    <td>@window.QuantityOfWindows</td>
+                                    <td>@window.TotalSubElements</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Element</th>
+                                                    <th>Type</th>
+                                                    <th>Width</th>
+                                                    <th>Height</th>
+                                                </tr>
+                                            </thead>
+                                            @foreach (var subElement in window.SubElements)
+                                            {
+                                                <tbody>
+                                                    <tr>
+                                                        <td>@subElement.Element</td>
+                                                        <td>@subElement.Type</td>
+                                                        <td>@subElement.Width</td>
+                                                        <td>@subElement.Height</td>
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                        </table>
+                                    </td>
 
-Welcome to your new app.
+                                </tr>
+                            </tbody>
+                        }
+                    </table>
+                }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+@code {
+
+}

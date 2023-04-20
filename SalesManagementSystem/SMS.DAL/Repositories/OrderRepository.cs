@@ -49,7 +49,31 @@ namespace SMS.DAL.Repositories
 
         public void Update(Order order)
         {
-            _databaseContext.Entry(order).State = EntityState.Modified;
+            _databaseContext.Orders.Update(order);
+            foreach (var window in order.Windows)
+            {
+                if (window.IsDeleted)
+                {
+                    _databaseContext.Windows.Remove(window);
+                    continue;
+                }
+                else
+                {
+                    _databaseContext.Entry(window).State = window.Id == 0 ? EntityState.Added : EntityState.Modified;
+                }
+                
+                foreach (var subElement in window.SubElements)
+                {
+                    if (subElement.IsDeleted)
+                    {
+                        _databaseContext.SubElements.Remove(subElement);
+                    }
+                    else
+                    {
+                        _databaseContext.Entry(subElement).State = subElement.Id == 0 ? EntityState.Added : EntityState.Modified;
+                    }
+                }
+            }
             _databaseContext.SaveChanges();
         }
     }

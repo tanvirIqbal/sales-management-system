@@ -14,6 +14,6 @@ namespace SMS.Shared.DTO
         public int Id { get; set; }
         public string? Name { get; set; }
         public StateCode State { get; set; }
-        public List<WindowDTO> Windows { get; set; }
+        public List<WindowDTO> Windows { get; set; }=new List<WindowDTO>();
     }
 }

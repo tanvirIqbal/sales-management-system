@@ -19,6 +19,7 @@ namespace SMS.Shared.Models
         public int TotalSubElements { get; set; }
 
         public List<SubElement> SubElements { get; set; }
+        public bool IsDeleted { get; set; }
 
         public int OrderId { get; set; }
         public Order Order { get; set; }

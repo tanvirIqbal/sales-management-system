@@ -23,6 +23,7 @@ namespace SMS.Shared.Models
 
         [Required]
         public int Height { get; set; }
+        public bool IsDeleted { get; set; }     
 
         public int WindowId { get; set; }
         public Window Window { get; set; }
