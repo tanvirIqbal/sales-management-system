@@ -23,7 +23,7 @@ A Blazor WebAssembly app, for managing sales order data.
 1. Clone the repository from GitHub ``git clone https://github.com/tanvirIqbal/sales-management-system.git``
 2. Run the project in Visual Studio 2022
 3. Go to ``Package Manager Console``
-![PMC.PNG](Screenshot/PMC.PNG)
+![PMC.PNG](Screenshot/PMC.png)
 4. Run this command in Package Manager Console.   
 ``Update-Database -Project SMS.DAL -StartupProject SMS.Server``
 ![PMC2.PNG](Screenshot/PMC2.PNG)
