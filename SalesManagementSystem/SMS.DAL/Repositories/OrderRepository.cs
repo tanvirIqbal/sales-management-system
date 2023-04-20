@@ -33,12 +33,18 @@ namespace SMS.DAL.Repositories
 
         public IEnumerable<Order> GetAll()
         {
-            return _databaseContext.Orders.ToList();
+            return _databaseContext.Orders
+            .Include(o => o.Windows)
+            .ThenInclude(w => w.SubElements)
+            .ToList();
         }
 
         public Order GetById(int Id)
         {
-            return _databaseContext.Orders.Find(Id);
+            return _databaseContext.Orders
+            .Include(o => o.Windows)
+            .ThenInclude(w => w.SubElements)
+            .FirstOrDefault(o => o.Id == Id);
         }
 
         public void Update(Order order)

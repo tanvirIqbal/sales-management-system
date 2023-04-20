@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMS.BLL.Contacts;
+using SMS.Shared.DTO;
 using SMS.Shared.Models;
 using System;
 
@@ -18,7 +19,7 @@ namespace SMS.Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUpdate(Order order)
+        public IActionResult AddUpdate(OrderDTO order)
         {
             var status = new Status();
             if (!ModelState.IsValid)
@@ -72,9 +73,8 @@ namespace SMS.Server.Controllers
         [HttpGet]
         public ActionResult GetAll()
         {
-            var model = _orderService.GetAll();
-
-            return Ok(model);
+            var orders = _orderService.GetAll();
+            return Ok(orders);
         }
     }
 }

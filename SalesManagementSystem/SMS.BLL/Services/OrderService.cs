@@ -1,5 +1,7 @@
-﻿using SMS.BLL.Contacts;
+﻿using AutoMapper;
+using SMS.BLL.Contacts;
 using SMS.DAL.Contacts;
+using SMS.Shared.DTO;
 using SMS.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -12,34 +14,40 @@ namespace SMS.BLL.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, IMapper mapper)
         {
             this._orderRepository = orderRepository;
+            this._mapper = mapper;
         }
-        public Task<Order> Create(Order order)
+        public Task<Order> Create(OrderDTO orderDto)
         {
+            var order = _mapper.Map<Order>(orderDto);
             return _orderRepository.Create(order);
         }
 
-        public void Delete(Order order)
+        public void Delete(OrderDTO orderDto)
         {
+            var order = _mapper.Map<Order>(orderDto);
             _orderRepository.Delete(order);
         }
 
-        public IEnumerable<Order> GetAll()
+        public IEnumerable<OrderDTO> GetAll()
         {
             var orders = _orderRepository.GetAll();
-            return orders;
+            return _mapper.Map<List<OrderDTO>>(orders);
         }
 
-        public Order GetById(int Id)
+        public OrderDTO GetById(int Id)
         {
-            return _orderRepository.GetById(Id);
+            var order = _orderRepository.GetById(Id);
+            return _mapper.Map<OrderDTO>(order);
         }
 
-        public void Update(Order order)
+        public void Update(OrderDTO orderDto)
         {
+            var order = _mapper.Map<Order>(orderDto);
             _orderRepository.Update(order);
         }
     }

@@ -1,4 +1,5 @@
 ﻿@page "/orders"
+@using SMS.Shared.DTO;
 @using SMS.Shared.Models;
 @inject HttpClient http
 @inject IJSRuntime jsRuntime
@@ -37,10 +38,10 @@
 }
 
 @code {
-    private List<Order> orders = new();
+    private List<OrderDTO> orders = new();
 
 
-    private async Task Delete(Order order)
+    private async Task Delete(OrderDTO order)
     {
         bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
         if (confirmed)
@@ -52,9 +53,13 @@
         }
     }
 
-    private async Task GetOrders(int pageNo = 1)
+    private async Task GetOrders()
     {
-        orders = await http.GetFromJsonAsync<List<Order>>($"api/order/getall");
+        orders = await http.GetFromJsonAsync<List<OrderDTO>>($"api/order/getall");
+
+        //var response = await http.GetAsync($"api/order/getall");
+        //var order = await response.Content.ReadFromJsonAsync<List<Order>>();
+
     }
 
     protected override async Task OnInitializedAsync()

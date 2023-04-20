@@ -1,5 +1,6 @@
 ﻿@page "/order/add"
 @page "/order/edit/{id:int}"
+@using SMS.Shared.DTO;
 @using SMS.Shared.Models
 @using static SMS.Shared.Enums;
 @inject HttpClient http
@@ -46,7 +47,7 @@
 
     private string Title = "Add order";
     private string messageClass = "";
-    Order order = new();
+    OrderDTO order = new();
     Status? status = new();
     private async Task Save()
     {
@@ -69,7 +70,7 @@
     {
         if (Id > 0)
         {
-            order = await http.GetFromJsonAsync<Order>($"api/order/getbyid/{Id}");
+            order = await http.GetFromJsonAsync<OrderDTO>($"api/order/getbyid/{Id}");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SMS.Shared.Models;
+﻿using SMS.Shared.DTO;
+using SMS.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace SMS.BLL.Contacts
 {
     public interface IOrderService
     {
-        public Task<Order> Create(Order order);
-        public void Delete(Order order);
-        public void Update(Order order);
-        public IEnumerable<Order> GetAll();
-        public Order GetById(int Id);
+        public Task<Order> Create(OrderDTO order);
+        public void Delete(OrderDTO order);
+        public void Update(OrderDTO order);
+        public IEnumerable<OrderDTO> GetAll();
+        public OrderDTO GetById(int Id);
     }
 }

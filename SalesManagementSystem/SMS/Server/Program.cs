@@ -5,6 +5,7 @@ using SMS.BLL.Services;
 using SMS.DAL.Contacts;
 using SMS.DAL.Data;
 using SMS.DAL.Repositories;
+using SMS.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,18 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
+
+builder.Services.AddAutoMapper(typeof(ApplicationMapper));
+
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IWindowRepository, WindowRepository>();
+builder.Services.AddScoped<ISubElementRepository, SubElementRepository>();
+
+
 builder.Services.AddScoped<IOrderService, OrderService>();
+//builder.Services.AddScoped<IWindowService, WindowService>();
+//builder.Services.AddScoped<ISubElementService, SubElementService>();
 
 var app = builder.Build();
 
